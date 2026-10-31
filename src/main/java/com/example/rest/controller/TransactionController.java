@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.rest.dto.TransactionRequest;
+import com.example.rest.dto.TransactionResponse;
 import com.example.rest.entity.Transaction;
 import com.example.rest.service.TransactionService;
 
@@ -28,14 +29,35 @@ public class TransactionController {
 	private final TransactionService transactionservice;
 	
 	@PostMapping
-	public Transaction addTransaction(@Valid @RequestBody TransactionRequest request) {
-		return transactionservice.addTransaction(request);
+	public TransactionResponse addTransaction(@Valid @RequestBody TransactionRequest request) {
+		
+		Transaction transaction=transactionservice.addTransaction(request);
+		
+		return transactionservice.maptoResponse(transaction);
 	}
 	
 	@GetMapping
-	public List<Transaction> getAllTransaction(){
+	public List<TransactionResponse> getAllTransaction(){
 		
-		return transactionservice.getAllTransaction();
+		List<Transaction> transactions=transactionservice.getAllTransaction();
+		
+		return transactions.stream().map(transactionservice::maptoResponse).toList();
+	}
+	
+	@GetMapping("{id}")
+	public TransactionResponse getTransaction(@PathVariable long id) {
+		
+		Transaction transaction=transactionservice.gettransactionbyid(id);
+		
+		return transactionservice.maptoResponse(transaction);
+	}
+	
+	@PutMapping("/{id}")
+	public TransactionResponse updateTransaction(@PathVariable long id,@Valid @RequestBody TransactionRequest request) {
+		
+		Transaction transaction=transactionservice.updateTransaction(id, request);
+		return transactionservice.maptoResponse(transaction);
+		//return transactionservice.updateTransaction(id, request);
 	}
 	
 	@DeleteMapping("/{id}")
@@ -44,14 +66,4 @@ public class TransactionController {
 	    return "Transaction deleted successfully";
 	}
 
-	@GetMapping("{id}")
-	public Transaction getTransaction(@PathVariable long id) {
-		return transactionservice.gettransactionbyid(id);
-	}
-	
-	@PutMapping("/{id}")
-	public Transaction updateTransaction(@PathVariable long id,@Valid @RequestBody TransactionRequest request) {
-		
-		return transactionservice.updateTransaction(id, request);
-	}
 }

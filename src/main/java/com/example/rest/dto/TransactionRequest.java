@@ -8,13 +8,18 @@ import com.example.rest.entity.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionRequest {
 
 	@NotBlank(message="title is required")
 	private String title;
+	
 	
 	@NotNull(message="Amount is required")
 	@Positive(message="amount should positive")
@@ -28,9 +33,7 @@ public class TransactionRequest {
 	@NotNull(message="transaction type is required")
 	private CategoryType type;
 	
-	@Positive(message="user id should be positive")
-	private long userId;
-	
-	@Positive(message="category is should be positive")
-	private long categoryId;
+	@NotNull(message="Category ID is required")
+	@Positive(message="Category ID must be positive")
+	private Long categoryId;
 }

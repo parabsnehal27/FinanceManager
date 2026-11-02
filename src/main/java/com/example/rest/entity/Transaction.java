@@ -37,7 +37,7 @@ public class Transaction {
 	@Enumerated(EnumType.STRING)
 	private CategoryType type;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="user_id",nullable=false)
 	private User user;
 	

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.rest.dto.DashboardResponse;
 import com.example.rest.dto.TransactionRequest;
 import com.example.rest.dto.TransactionResponse;
 import com.example.rest.entity.Transaction;
@@ -29,11 +30,13 @@ public class TransactionController {
 	private final TransactionService transactionservice;
 	
 	@PostMapping
-	public TransactionResponse addTransaction(@Valid @RequestBody TransactionRequest request) {
-		
-		Transaction transaction=transactionservice.addTransaction(request);
-		
-		return transactionservice.maptoResponse(transaction);
+	public TransactionResponse addTransaction(
+	        @Valid @RequestBody TransactionRequest request) {
+
+	    Transaction transaction =
+	            transactionservice.addTransaction(request);
+
+	    return transactionservice.maptoResponse(transaction);
 	}
 	
 	@GetMapping
@@ -41,7 +44,7 @@ public class TransactionController {
 		
 		List<Transaction> transactions=transactionservice.getAllTransaction();
 		
-		return transactions.stream().map(transactionservice::maptoResponse).toList();
+		return transactions.stream().map(transactionservice::maptoResponse).toList(); 
 	}
 	
 	@GetMapping("{id}")
@@ -66,4 +69,20 @@ public class TransactionController {
 	    return "Transaction deleted successfully";
 	}
 
+	@GetMapping("/dashboard")
+	public DashboardResponse getDashboard() {
+
+	    return transactionservice.getDashboardSummary();
+	}
+	
+	@GetMapping("/recent")
+	public List<TransactionResponse> getRecentTransactions() {
+
+	    List<Transaction> transactions =
+	            transactionservice.getRecentTransactions();
+
+	    return transactions.stream()
+	            .map(transactionservice::maptoResponse)
+	            .toList();
+	}
 }

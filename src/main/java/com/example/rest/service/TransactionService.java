@@ -114,7 +114,7 @@ public class TransactionService {
 	    transaction.setTransactiondate(request.getTransactionDate());
 	    transaction.setType(request.getType());
 	    transaction.setCategoty(category);
-	
+	    
 	    return transactionrepository.save(transaction);
 	}
 
@@ -139,6 +139,10 @@ public class TransactionService {
 		
 		response.setUserId(transaction.getId());
 		
+		response.setCategoryId(
+			    transaction.getCategoty() != null
+			        ? transaction.getCategoty().getId()
+			        : null );
 		return response;
 	}
 	
@@ -149,23 +153,51 @@ public class TransactionService {
 	            .getName();
 	}
 	
-	public DashboardResponse getDashboardSummary() {
-		
-		String email=getLoggedInUserEmail();
-		
-		BigDecimal income=transactionrepo.getTotalByType(email, CategoryType.Income);
-
-		BigDecimal expense=transactionrepo.getTotalByType(email, CategoryType.Expense);
+//	public DashboardResponse getDashboardSummary() {
+//		
+//		String email=getLoggedInUserEmail();
+//		
+//		BigDecimal income=transactionrepo.getTotalByType(email, CategoryType.Income);
+//
+//		BigDecimal expense=transactionrepo.getTotalByType(email, CategoryType.Expense);
+//	
+//		DashboardResponse response=new DashboardResponse();
+//		
+//		response.setTotalIncome(income);
+//		response.setTotalExpense(expense);
+//		response.setBalance(income.subtract(expense));
+//		
+//		return response;
+//		
+//	}
 	
-		DashboardResponse response=new DashboardResponse();
-		
-		response.setTotalIncome(income);
-		response.setTotalExpense(expense);
-		response.setBalance(income.subtract(expense));
-		
-		return response;
-		
+
+	public DashboardResponse getDashboardSummary() {
+	
+	    String email = getLoggedInUserEmail();
+	
+	    System.out.println("Logged in email: " + email);
+	
+	    BigDecimal income = transactionrepo.getTotalByType(
+	        email, CategoryType.Income
+	    );
+	
+	    BigDecimal expense = transactionrepo.getTotalByType(
+	        email, CategoryType.Expense
+	    );
+	
+	    System.out.println("Total Income: " + income);
+	    System.out.println("Total Expense: " + expense);
+	
+	    DashboardResponse response = new DashboardResponse();
+	
+	    response.setTotalIncome(income);
+	    response.setTotalExpense(expense);
+	    response.setBalance(income.subtract(expense));
+	
+	    return response;
 	}
+
 	
 	public List<Transaction> getRecentTransactions() {
 

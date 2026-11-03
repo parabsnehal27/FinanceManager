@@ -24,6 +24,8 @@ public class TransactionResponse {
 	
 	private String categoryName;
 	
+	private long categoryId;
+	
 	private long userId;
 	
 }

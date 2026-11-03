@@ -40,17 +40,23 @@ public class AuthService {
 		return "user registered successfully";
 	}
 	
+
 	public String login(LoginRequest request) {
-		
-		User user=userrepo.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("user not found"));
-		
-		boolean passwordmatch=passwordencoder.matches(request.getPassword(),user.getPassword());
-		
-		if(!passwordmatch) {
-			return "invalid password";
-		}
-		
-		return jwtservice.generateToken(user.getEmail());
-	} 
+	
+	    User user = userrepo.findByEmail(request.getEmail())
+	            .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+	
+	    boolean passwordmatch = passwordencoder.matches(
+	            request.getPassword(),
+	            user.getPassword()
+	    );
+	
+	    if (!passwordmatch) {
+	        throw new RuntimeException("Invalid email or password");
+	    }
+	
+	    return jwtservice.generateToken(user.getEmail());
+	}
+
 	
 }

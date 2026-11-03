@@ -39,7 +39,7 @@ public class TransactionController {
 	    return transactionservice.maptoResponse(transaction);
 	}
 	
-	@GetMapping
+	@GetMapping("/all")
 	public List<TransactionResponse> getAllTransaction(){
 		
 		List<Transaction> transactions=transactionservice.getAllTransaction();

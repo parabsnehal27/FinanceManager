@@ -1,29 +1,52 @@
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import AddTransaction from './pages/AddTransaction'
 import EditTransaction from './pages/EditTransaction'
 
+import ProtectedRoute from './components/ProtectedRoute'
+
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<h1>Finance Manager</h1>} />
 
-        <Route path="/login" element={<Login />} />
+    return (
+        <BrowserRouter>
 
-        <Route path="/register" element={<Register />} />
+            <Routes>
 
-        <Route path="/dashboard" element={<Dashboard ></Dashboard>}></Route>
-      
-        <Route path="/add-transaction" element={<AddTransaction />}></Route>
-      
-        <Route path="/edit-transaction/:id" element={<EditTransaction/>}></Route>
-      </Routes>
-    </BrowserRouter>
-  )
+                {/* Default page opens Login */}
+                <Route path="/" element={<Navigate to="/login" replace />} />
+
+                {/* Public routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+
+                {/* Protected routes */}
+                <Route element={<ProtectedRoute />}>
+
+                    <Route path="/dashboard" element={<Dashboard />} />
+
+                    <Route
+                        path="/add-transaction"
+                        element={<AddTransaction />}
+                    />
+
+                    <Route
+                        path="/edit-transaction/:id"
+                        element={<EditTransaction />}
+                    />
+
+                </Route>
+
+                {/* Unknown URL redirects to Login */}
+                <Route path="*" element={<Navigate to="/login" replace />} />
+
+            </Routes>
+
+        </BrowserRouter>
+    )
 }
 
 export default App

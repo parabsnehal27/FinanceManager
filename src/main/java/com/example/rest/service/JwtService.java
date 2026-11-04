@@ -1,6 +1,7 @@
 package com.example.rest.service;
 
 import java.security.Key;
+import org.springframework.beans.factory.annotation.Value;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -13,8 +14,9 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-
-	private final String SECRET_KEY="mySecretKeyForFinanceManagerApplication12345678";
+	
+	@Value("${jwt.secret}")
+	private String SECRET_KEY;
 	
 	private Key getSigninKey() {
 		
